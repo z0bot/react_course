@@ -142,3 +142,136 @@ function getBooks() {
 function getBook(id) {
   return data.find((d) => d.id === id);
 }
+
+/*
+/* 
+===== DESCRUTURING OBJECTS AND ARRAYS =====
+getting data out of an object or array
+*/
+
+const books = getBooks();
+//books;
+
+const book = getBook(3);
+book;
+//const title = book.title;
+
+//INSTEAD OF DOING THIS
+//const bookTitle = getBook(2).title; //const bookAuthor = getBook(2).author;
+//console.log(bookTitle, bookAuthor);
+
+/* ===== DO THIS: destructuring only works when the var is the same name as object property ===== */
+const { title, author, pages, publicationDate, hasMovieAdaptation, genres } =
+  book;
+title;
+genres;
+
+//primaryGenre = genres[0];
+//secondaryGenre = genres[1];
+
+/* ===== destructuring can be done with arrays as well just need [] ====== */
+
+const [primaryGenre, secondaryGenre] = genres;
+console.log(primaryGenre, secondaryGenre);
+
+/* 
+===== REST OPERATOR =====
+The rest parameter syntax allows a function to accept an indefinite number of 
+arguments as an array, providing a way to represent variadic functions in JavaScript
+*/
+const [primary, secondary, ...other] = genres;
+other;
+
+/* 
+===== SPREAD OPERATOR =====
+The spread operator gives you access to the insides of an iterable object. 
+*/
+
+/* const newGenres = [...genres, "epic fantasy"];
+   OR */
+const newGenres = ["epic fantasy", ...genres];
+newGenres;
+
+//updatedBook = { book, moviePublicationDate: "2001-09-12" }; // will append another object property rather than add to existing object
+updatedBook = {
+  ...book,
+  //adding a new object property
+  moviePublicationDate: "2001-09-12",
+  //updating the object property
+  pages: "1210",
+};
+updatedBook;
+
+/* 
+==== ARROW FUNCTIONS ====
+OLD WAY 
+function getYear(year) {
+  return year.split("-")[0];
+} 
+*/
+
+const getYear = (str) => str.split("-")[0]; // only have to have the return statement & fn blocks if multiple lines are stated
+
+/*
+===== TEMPLATE LITERALS =====
+Allows creation of strings that contain JS expressions
+Strings use "" ''
+Literals use ``
+*/
+
+const summary = `${title} was a ${pages}-long book, and was written by ${author}
+and published in ${getYear(publicationDate)}. 
+The book ${hasMovieAdaptation ? "has" : "has not"} been adapted to a movie.`;
+
+summary;
+// note: i had an error where I couldn't access the pages property and it was because
+// i didn't include take it out of the books object in the descructured variables that I declared above
+
+// ==== TERNARY OPERATOR ====
+pageRange = pages > 1000 ? "over 1000" : "less than 1000";
+
+// ===== SHORT CIRCUITING & LOGICAL OPERATORS =====
+
+console.log(true && "GBFLOP");
+console.log(false && "GBFLOP");
+console.log(hasMovieAdaptation && "GBFLOP");
+
+//falsy: 0, '', null, undefinded
+console.log("GBMGORF" && "GBFLOP");
+console.log(0 && "GBFLOP");
+
+console.log(true || "GBFLOP");
+console.log(false || "GBFLOP");
+
+console.log(book.translations.spanish);
+const spanishTranslation = book.translations.spanish || "NOT TRANSLATED";
+spanishTranslation;
+
+//console.log(book.reviews.librarything.reviewsCount);
+//const countWrong = book.reviews.librarything.reviewsCount || "NO DATA";
+//countWrong;
+
+/* ===== NULLISH COALESING =====
+will only return the second value when the first value is null or undefined
+*/
+//const count = book.reviews.librarything.reviewsCount ?? "no data";
+
+/* ===== OPTIONAL CHAINING =====
+ adding a ? to evalute if a property is present
+ becuase of the optional chainging, JS will no longer try to read
+ reviewsCount out of the undefined property librarything
+*/
+
+function getTotalReviewCount(poop) {
+  const goodreads = poop.reviews?.goodreads.reviewsCount;
+  const librarything = poop.reviews?.librarything?.reviewsCount ?? 0;
+
+  return goodreads + librarything;
+}
+
+console.log(getTotalReviewCount(book));
+
+/* ===== FUNCTIONAL ARRAY METHODS =====
+Array: map, filter, reduce 
+Called functional because they don't alter the source array
+*/
