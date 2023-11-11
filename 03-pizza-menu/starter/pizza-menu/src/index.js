@@ -73,12 +73,43 @@ function Header() {
 }
 
 function Menu() {
+  const pizzas = pizzaData;
+  //const pizzas = [];
+  const numPizzas = pizzas.length;
+
+  //react fragments <> used to return multiple html elements
   return (
     <main className="menu">
+      <>
+        <h2>Our Menu</h2>
+        <p>
+          Authentic Italian cuisine. 6 creative dishes to choose from. All from
+          our stone oven, all organic, all delicious.
+        </p>
+        {numPizzas > 0 ? (
+          <ul className="pizzas">
+            {pizzas.map((pizza, index) => (
+              <Pizza pizzaObject={pizza}></Pizza>
+            ))}
+          </ul>
+        ) : (
+          <p>We're still working on our menu. Sorry 'bout ya.</p>
+        )}
+      </>
+
+      {/*
+    <main className="menu">
       <h2>Our Menu</h2>
+      {numPizzas > 0 && (
+        <ul className="pizzas">
+          {pizzas.map((pizza, index) => (
+            <Pizza pizzaObject={pizza}></Pizza>
+          ))}
+        </ul>
+      )}
       <Pizza
         name="Pizza Spinaci"
-        ingredients="Tomato, mozarella, spinach, and ricotta cheese"
+        ingredhients="Tomato, mozarella, spinach, and ricotta cheese"
         photoName="pizzas/spinaci.jpg"
         price={10}
       />
@@ -88,24 +119,30 @@ function Menu() {
         price={12}
         photoName="pizzas/funghi.jpg"
       />
+      */}
     </main>
   );
 }
 
 // components always start w uppercase
 // fn needs to return markup
-function Pizza(props) {
-  console.log(props);
-
+//destructure
+function Pizza({ pizzaObject }) {
+  /*
+  if (pizzaObject.soldOut) { return null;}
+  */
   return (
-    <div className="pizza">
-      <img src={props.photoName} alt={props.name} />
+    <li className={`pizza ${pizzaObject.soldOut ? "sold-out" : ""}`}>
+      {/* the above uses template literals to use JS `` tp enter JS mode use {} the ${} enters JS mode in a template literal
+      <li className={pizzaObject.soldOut ? "pizza sold-out" : "pizza"}>*/}
+      <img src={pizzaObject.photoName} alt={pizzaObject.name} />
       <div className="">
-        <h3>{props.name}</h3>
-        <p>{props.ingredients}</p>
-        <span>{props.price + 3}</span>
+        <h3>{pizzaObject.name}</h3>
+        <p>{pizzaObject.ingredients}</p>
+        <span>{pizzaObject.price + 3}</span>
+        <span>{pizzaObject.soldOut ? "Sold Out" : pizzaObject.price} </span>
       </div>
-    </div>
+    </li>
   );
 }
 
@@ -119,18 +156,36 @@ function Footer() {
   console.log(isOpen);
 
   /*
-  if (hour >= openHour && hour <= closeHour) {
-    alert("wer're currently open!"); // alert blocks JS so not ideal
-  } else {
-    alert("Sorry we're closed");
+  if (hour >= openHour && hour <= closeHour) { alert("wer're currently open!"); // alert blocks JS so not ideal} 
+  else { alert("Sorry we're closed"); }
+  */
+  /*
+  if (!isOpen) {
+    return <p> CLOSED</p>;
   }
   */
 
   // the power of adding javascript into HTML
+  // remember JSX simply gets turned into javascript
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()}. We're currently open!
+      {isOpen ? (
+        <Order closeHour={closeHour} />
+      ) : (
+        <p>
+          We're happy to welcome you in between {openHour} and {closeHour}
+        </p>
+      )}
     </footer>
+  );
+}
+
+function Order({ closeHour }) {
+  return (
+    <div className="order">
+      <p>We're open until {closeHour}:00. Come visit us or order online!</p>
+      <button className="btn">Order</button>
+    </div>
   );
 }
 
