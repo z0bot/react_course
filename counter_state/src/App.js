@@ -12,16 +12,26 @@ export default function App() {
 function Counter() {
   const [count, setCount] = useState(0);
   const [step, setStep] = useState(1);
+  const [rangeValue, setRangeValue] = useState(1); //controlled element
+  const [showReset, setShowReset] = useState(false);
 
   const date = new Date();
   date.setDate(date.getDate() + count);
 
   function handleAdd() {
-    setCount((c) => c + step);
+    setShowReset(true);
+    setCount((c) => c + rangeValue);
   }
 
   function handleSubtract() {
-    setCount((c) => c - step);
+    setShowReset(true);
+    setCount((c) => c - rangeValue);
+  }
+
+  function handleReset() {
+    setCount(0);
+    setRangeValue(1);
+    setShowReset(false);
   }
 
   function handleAddStep() {
@@ -34,16 +44,39 @@ function Counter() {
   return (
     <div>
       <div>
-        <span>
+        {/*<span>
           <button onClick={handleSubStep}> - </button>
           &nbsp; Step: {step} &nbsp;
           <button onClick={handleAddStep}> + </button>
-        </span>
+        </span>*/}
+        <input
+          type="range"
+          min={1}
+          max={10}
+          value={rangeValue}
+          onChange={(e) => {
+            setShowReset(true);
+            setRangeValue(Number(e.target.value));
+          }}
+        />
+        {rangeValue}
       </div>
       <div>
         <span>
+          {/*
           <button onClick={handleSubtract}> - </button>
           &nbsp; Count: {count} &nbsp;
+          <button onClick={handleAdd}> + </button>
+            */}
+          <button onClick={handleSubtract}> - </button>
+          <input
+            type="text"
+            value={count}
+            onChange={(e) => {
+              setShowReset(true);
+              setCount(Number(e.target.value));
+            }}
+          ></input>
           <button onClick={handleAdd}> + </button>
         </span>
       </div>
@@ -57,6 +90,7 @@ function Counter() {
         </span>
         <span>{date.toDateString()}</span>
       </p>
+      {showReset && <button onClick={handleReset}>Reset</button>}
     </div>
   );
 }

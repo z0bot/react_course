@@ -202,6 +202,9 @@ this is not functional so it will mutate original array */
 const arr = [3, 7, 1, 9, 6];
 arr;
 //const sort = arr.sort((a, b) => a - b); //sort ascending
+
+//SLICE method for arrs returns selected elements as a new array
+//arr.slice(start, end);
 const sort = arr.slice().sort((a, b) => a - b); // this is how to get around mutating OG array
 sort;
 
@@ -233,6 +236,7 @@ booksAfterDelete;
 
 // 3) update a single book object while in the array
 // map creates an array the same length
+// ... takes all the elements of the object and puts into the new object
 const booksAfterUpdate = booksAfterDelete.map((book) =>
   book.id === 1 ? { ...book, pages: 1210 } : book
 );
